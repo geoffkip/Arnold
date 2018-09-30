@@ -23,8 +23,8 @@ cursor.execute('''
     CREATE TABLE facilities(
                name_of_doctor text,
                type_of_clinic TEXT,
-               street1 TEXT, 
-               street2 TEXT 
+               street1 TEXT,
+               street2 TEXT
                city,
                state TEXT,
                zip INTEGER,
@@ -50,28 +50,10 @@ df.to_sql("facilities",con=db, if_exists="replace")
 def return_facilities(zipcode):
     database = "/Users/geoffrey.kip/Projects/slackbots/facilities.db"
     db = sqlite3.connect(database)
-    sql="""SELECT * FROM (SELECT 
+    sql="""SELECT * FROM (SELECT
     name_of_doctor || " " || street1 || " " ||  street2 || " " || city ||  " " || state || " " || zip || " " ||  phone as address
     FROM facilities where zip={0}) where address is not null""".format(zipcode)
     return pd.read_sql(sql, con=db)
 
 return_facilities(19104)
     
-
-cursor=db.cursor()
-result= cursor.execute(sql)
-data=[]
-for row in cursor:
-    data.append(row)
-    
-attachments = []
-for i in range(0,10):
-    print(data[i])
-
-    attachment = {
-        "title": "Facilities addresses",
-        "fields": [{
-            "value": "Address: {0}".format(data[i])
-        }]
-    }
-    attachments.append(attachment)

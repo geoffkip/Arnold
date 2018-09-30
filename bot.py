@@ -6,7 +6,7 @@ import os
 class Bot(object):
     def __init__(self):
         self.slack_client = SlackClient(os.environ['SLACK_CLIENT'])
-        self.bot_name = "jarvis"
+        self.bot_name = "arnold"
         self.bot_id = self.get_bot_id()
 
         if self.bot_id is None:

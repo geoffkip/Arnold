@@ -17,8 +17,8 @@ class Event:
         if event and 'text' in event and self.bot.bot_id in event['text']:
             self.handle_event(event['user'], event['text'].split(self.bot.bot_id)[1].strip().lower(), event['channel'])
 
-    def handle_event(self, user, command, channel):
+    def handle_event(self, user, message, channel):
         if command and channel:
-            print ("Received command: " + command + " in channel: " + channel + " from user: " + user)
-            response = self.command.handle_command(user, command)
+            print ("Received message: " + message + " in channel: " + channel + " from user: " + user)
+            response = self.command.handle_message(user, message)
             self.bot.slack_client.api_call("chat.postMessage", channel=channel, text=response, as_user=True)

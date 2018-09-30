@@ -6,20 +6,20 @@ class Command(object):
     GREETING_RESPONSES = ["how can I assist you?", "how's your day going", "how can I help you?"]
 
     def __init__(self):
-        self.commands = {
-            "hi": self.return_greeting(),
-            "help" : self.assist(),
-            "facilities": self.return_facilities(zipcode=19143)
-        }
+        pass
 
-    def handle_command(self, user, command):
+    def handle_message(self, user, message):
         response = "<@" + user + ">: "
+        argv = message.split(" ")
+        command=argv[0]
 
-        if command in self.commands:
-            response += self.commands[command]
-        else:
-            response += "Sorry I don't understand"
-
+        if command == "hi":
+            response += self.return_greeting()
+        if command == "facilities":
+            zipcode= argv[1]
+            response += self.return_facilities(zipcode=zipcode)
+        if command == "help":
+            response += self.assist()
         return response
 
     def return_greeting(self):
@@ -27,7 +27,7 @@ class Command(object):
         return random.choice(Command.GREETING_RESPONSES)
 
     def assist(self):
-        return "I can help you locate locations of facilities in your zipcode. Please enter your zipcode"
+        return "I can help you locate locations of facilities in your zipcode. Please enter facilities followed by your zipcode"
 
     def return_facilities(self,zipcode=None):
         data=[]

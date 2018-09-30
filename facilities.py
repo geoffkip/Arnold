@@ -57,3 +57,21 @@ def return_facilities(zipcode):
 
 return_facilities(19104)
     
+
+cursor=db.cursor()
+result= cursor.execute(sql)
+data=[]
+for row in cursor:
+    data.append(row)
+    
+attachments = []
+for i in range(0,10):
+    print(data[i])
+
+    attachment = {
+        "title": "Facilities addresses",
+        "fields": [{
+            "value": "Address: {0}".format(data[i])
+        }]
+    }
+    attachments.append(attachment)

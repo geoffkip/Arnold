@@ -20,5 +20,19 @@ class Event:
     def handle_event(self, user, message, channel):
         if command and channel:
             print ("Received message: " + message + " in channel: " + channel + " from user: " + user)
-            response = self.command.handle_message(user, message)
-            self.bot.slack_client.api_call("chat.postMessage", channel=channel, text=response, as_user=True)
+            if command == "facilities":
+                data = self.command.handle_message(user, message)
+                attachments = []
+                for i in range(0,10):
+                    print(data[i])
+                    attachment = {
+                        "title": "Facilities addresses",
+                        "fields": [{
+                            "value": "Address: {0}".format(data[i])
+                        }]
+                    }
+                    attachments.append(attachment)
+                self.bot.slack_client.api_call("chat.postMessage", channel=channel, text="Facilities",attachments=attachments, as_user=True)
+            else:
+                response = self.command.handle_message(user, message)
+                self.bot.slack_client.api_call("chat.postMessage", channel=channel, text=response, as_user=True)

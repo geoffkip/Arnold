@@ -15,11 +15,13 @@ class Command(object):
 
         if command == "hi":
             response += self.return_greeting()
-        if command == "facilities":
+        elif command == "facilities":
             zipcode= argv[1]
             response += self.return_facilities(zipcode=zipcode)
-        if command == "help":
+        elif command == "help":
             response += self.assist()
+        else:
+            response += "Sorry I do not understand you"
         return response
 
     def return_greeting(self):

@@ -32,7 +32,7 @@ class Command(object):
 
     def return_facilities(self,zipcode=None):
         data=[]
-        database = "/Users/geoffrey.kip/Projects/Arnold/facilities.db"
+        database = "./facilities.db"
         db = sqlite3.connect(database)
         cursor= db.cursor()
         sql="""SELECT * FROM (SELECT

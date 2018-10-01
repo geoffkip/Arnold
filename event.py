@@ -20,13 +20,12 @@ class Event:
     def handle_event(self, user, message, channel):
         if command and channel:
             print ("Received message: " + message + " in channel: " + channel + " from user: " + user)
-            if command == "facilities":
-                data = self.command.handle_message(user, message)
+            data = self.command.handle_message(user, message)
+            if "facilities" in message:
                 attachments = []
-                for i in range(0,10):
-                    print(data[i])
+                for i in range(len(data)):
                     attachment = {
-                        "title": "Facilities addresses",
+                        "title": "Facility",
                         "fields": [{
                             "value": "Address: {0}".format(data[i])
                         }]

@@ -1,2 +1,3 @@
 slack_auth.json
 *.pyc
+__pycache_

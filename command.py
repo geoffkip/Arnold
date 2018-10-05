@@ -1,6 +1,7 @@
 import random
 import  sqlite3
 import pandas as pd
+from datetime import datetime
 
 class Command(object):
     GREETING_RESPONSES = ["how can I assist you?", "how's your day going", "how can I help you?"]
@@ -19,6 +20,11 @@ class Command(object):
             response = self.return_facilities(zipcode=zipcode)
         elif command == "help":
             response = "<@" + user + ">: " + self.assist()
+        elif command == "collect":
+            user=user
+            data= message
+            self.collect_data(user=user, data=data)
+            response = "<@" + user + ">: " + "The data point and time have been recorded"
         else:
             response = "<@" + user + ">: " + "Sorry I do not understand you"
         return response
@@ -42,3 +48,14 @@ class Command(object):
         for row in result:
             data.append(row)
         return data
+
+    def collect_data(self,user=None, data=None):
+        user= user
+        date= datetime.now().strftime("%Y-%m-%d")
+        data= data
+        database = "./data_collector.db"
+        db = sqlite3.connect(database)
+        cursor = db.cursor()
+        cursor.execute('''INSERT INTO data_collector(user, text_body, recorded_at)
+                      VALUES(?,?,?)''', (user,data,date))
+        db.commit()

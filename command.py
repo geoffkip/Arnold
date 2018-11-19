@@ -2,6 +2,14 @@ import random
 import  sqlite3
 import pandas as pd
 from datetime import datetime
+import os
+import argparse
+
+from google.cloud import language
+from google.cloud.language import enums
+from google.cloud.language import types
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/geoffrey.kip/Projects/Arnold/nlp_creds.json"
 
 class Command(object):
     GREETING_RESPONSES = ["how can I assist you?", "how's your day going", "how can I help you?"]
@@ -20,6 +28,8 @@ class Command(object):
             response = self.return_facilities(zipcode=zipcode)
         elif command == "help":
             response = "<@" + user + ">: " + self.assist()
+        elif command == "sentiment":
+            response = print_result(analyze(message))
         elif command == "collect":
             user=user
             data= message
@@ -59,3 +69,28 @@ class Command(object):
         cursor.execute('''INSERT INTO data_collector(user, text_body, recorded_at)
                       VALUES(?,?,?)''', (user,data,date))
         db.commit()
+
+def print_result(annotations):
+    score = annotations.document_sentiment.score
+    magnitude = annotations.document_sentiment.magnitude
+
+    for index, sentence in enumerate(annotations.sentences):
+        sentence_sentiment = sentence.sentiment.score
+        print('Text has a sentiment score of {}'.format(sentence_sentiment))
+
+    result = ('Overall Sentiment: score of {} with magnitude of {}'.format(
+        score, magnitude))
+    return result
+
+
+def analyze(text):
+    """Run a sentiment analysis request on text within a passed filename."""
+    client = language.LanguageServiceClient()
+
+    document = types.Document(
+        content=text,
+        type=enums.Document.Type.PLAIN_TEXT)
+    annotations = client.analyze_sentiment(document=document)
+
+    # Print the results
+    return annotations
